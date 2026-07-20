@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+html,
+body,
+.stApp {
+    font-family: Inter, sans-serif;
+}
+
+.block-container {
+    max-width: 1200px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+#MainMenu,
+header,
+footer {
+    visibility: hidden;
+}
+
+[data-testid="stFileUploader"] {
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+section[data-testid="stSidebar"] {
+    width: 280px !important;
+}
+
+[data-testid="stChatMessage"] {
+    border-radius: 12px;
+}
+
+.stButton > button,
+.stDownloadButton > button {
+    width: 100%;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+textarea {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
