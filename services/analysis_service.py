@@ -7,10 +7,6 @@ class AnalysisService:
         self.client = GeminiService()
 
     def generate_all(self, paper):
-        print("NEW ANALYSIS SERVICE RUNNING")
-
-        # Use less text to avoid Gemini overload
-        content = paper.full_text[:15000]
 
         prompt = f"""
 You are an expert research paper analyst.
@@ -27,20 +23,20 @@ Include:
 
 # Knowledge Check
 
-Generate 10 multiple choice questions.
+Generate 10 MCQs.
 
-Each question must include:
+Each MCQ must have:
 
 A.
 B.
 C.
 D.
 
-Return only markdown.
+Return ONLY markdown.
 
 Paper:
 
-{content}
+{paper.full_text[:15000]}
 """
 
         response = self.client.generate(prompt)
