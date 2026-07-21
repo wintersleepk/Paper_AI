@@ -20,23 +20,15 @@ st.set_page_config(
 
 load_css()
 
-# ----------------------------
-# Validate session
-# ----------------------------
-
-if (
-    "paper" not in st.session_state
-    or st.session_state.paper is None
-):
+if "paper" not in st.session_state or st.session_state.paper is None:
     st.switch_page("app.py")
 
 paper = st.session_state.paper
 
+
 render_sidebar(paper)
 
-# ----------------------------
 # Header
-# ----------------------------
 
 st.title(
     paper.title if paper.title else paper.filename
@@ -45,37 +37,30 @@ st.title(
 if paper.authors:
     st.caption(", ".join(paper.authors))
 
-# ----------------------------
 # Metrics
-# ----------------------------
 
 c1, c2, c3, c4 = st.columns(4)
 
-with c1:
-    st.metric("Pages", paper.pages)
-
-with c2:
-    st.metric("Reading Time", f"{paper.reading_time} min")
-
-with c3:
-    st.metric("Sections", len(paper.sections))
-
-with c4:
-    st.metric("Chunks", len(paper.chunks))
+c1.metric("Pages", paper.pages)
+c2.metric("Reading Time", f"{paper.reading_time} min")
+c3.metric("Sections", len(paper.sections))
+c4.metric("Chunks", len(paper.chunks))
 
 st.divider()
 
-# ----------------------------
-# Analysis Report
-# ----------------------------
+# Main Analysis
+
+st.markdown("## Analysis Report")
 
 st.markdown(
-    paper.summary if paper.summary else "No analysis generated."
+    paper.summary
+    if paper.summary
+    else "No analysis generated."
 )
 
-# ----------------------------
+st.divider()
+
 # Workspace
-# ----------------------------
 
 left, right = st.columns([2, 1])
 
@@ -87,14 +72,14 @@ with left:
 
     st.subheader("Document Preview")
 
-    preview_text = paper.full_text[:6000]
+    preview = paper.full_text[:6000]
 
     if len(paper.full_text) > 6000:
-        preview_text += "\n\n...\n\nPreview truncated."
+        preview += "\n\n...\n\nPreview truncated."
 
     st.text_area(
         "Preview",
-        preview_text,
+        preview,
         height=500,
         disabled=True
     )
@@ -131,9 +116,12 @@ with right:
 
             paper = analysis.generate_all(paper)
 
-            vector.save(paper)
-
             st.session_state.paper = paper
+
+            try:
+                vector.save(paper)
+            except Exception:
+                pass
 
             st.rerun()
 
@@ -144,10 +132,6 @@ with right:
         st.session_state.paper = paper
 
         st.rerun()
-
-# ----------------------------
-# Export
-# ----------------------------
 
 st.divider()
 
